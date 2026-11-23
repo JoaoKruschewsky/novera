@@ -1,0 +1,19 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "main": ".open-next/worker.js",
+  "name": "novera-site",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS",
+  },
+  "services": [
+    {
+      // Autorreferência exigida pelo OpenNext; o nome deve ser igual ao do Worker.
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "novera-site",
+    },
+  ],
+  "observability": { "enabled": false },
+}

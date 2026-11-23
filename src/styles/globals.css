@@ -1,0 +1,109 @@
+@import "tailwindcss";
+@import "./tokens.css";
+
+@layer base {
+  html {
+    background-color: var(--color-surface-base);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0ms !important;
+      animation-duration: 0ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-surface-base);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  /* Foco visível com token próprio: anel de 2 px + deslocamento de 2 px (design-system §3). */
+  :focus-visible {
+    outline: 2px solid var(--color-focus-ring);
+    outline-offset: 2px;
+  }
+
+  /* Âncoras não ficam escondidas sob o cabeçalho fixo. */
+  :target,
+  [id] {
+    scroll-margin-top: 5rem;
+  }
+
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+}
+
+@layer components {
+  /* Dentro das faixas de papel, o foco passa para graphite (contraste sobre sand). */
+  .paper :focus-visible {
+    outline-color: var(--color-focus-ring-paper);
+  }
+
+  .eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-eyebrow);
+    line-height: var(--text-eyebrow--line-height);
+    letter-spacing: var(--text-eyebrow--letter-spacing);
+    font-weight: 600;
+    font-variant-caps: all-small-caps;
+    text-transform: lowercase;
+  }
+
+  /* Texto corrido com links sublinhados (design-system §4, TextLink). */
+  .prose-novera a {
+    text-decoration-line: underline;
+    text-underline-offset: 0.2em;
+  }
+}
+
+/* Abertura do menu mobile (<dialog> nativo): só CSS, zerada com movimento reduzido (design-system §2.6). */
+@keyframes sheet-entrar {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes overlay-entrar {
+  from {
+    opacity: 0;
+  }
+}
+dialog.sheet-content[open] {
+  animation: sheet-entrar var(--duration-base) var(--ease-novera);
+}
+dialog.sheet-content[open]::backdrop {
+  animation: overlay-entrar var(--duration-base) var(--ease-novera);
+}
+/* Trava a rolagem da página enquanto o menu está aberto. */
+html:has(dialog.sheet-content[open]) {
+  overflow: hidden;
+}
