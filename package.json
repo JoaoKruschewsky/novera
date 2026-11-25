@@ -1,0 +1,58 @@
+{
+  "name": "novera-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "tsx scripts/check-publicacao.ts",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "next typegen && tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "e2e": "node scripts/e2e-matrix.mjs padrao",
+    "e2e:matrix": "node scripts/e2e-matrix.mjs",
+    "check:publicacao": "tsx scripts/check-publicacao.ts --relatorio",
+    "images:otimizar": "node scripts/otimizar-imagens.mjs",
+    "og:gerar": "node scripts/gerar-og.mjs",
+    "preview:cf": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy:cf": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+  },
+  "dependencies": {
+    "lucide-react": "1.77.0",
+    "next": "16.4.6",
+    "nodemailer": "10.6.1",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "resend": "6.39.0",
+    "server-only": "0.0.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
+    "@opennextjs/cloudflare": "1.20.18",
+    "@playwright/test": "1.65.1",
+    "@tailwindcss/turbopack": "4.3.3",
+    "@types/node": "24.19.2",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.6",
+    "eslint-plugin-jsx-a11y": "6.10.2",
+    "prettier": "3.10.1",
+    "prettier-plugin-tailwindcss": "0.8.1",
+    "sharp": "0.35.5",
+    "tailwindcss": "4.3.3",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.73.0",
+    "vitest": "5.1.1",
+    "wrangler": "4.166.0"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

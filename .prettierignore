@@ -1,0 +1,17 @@
+node_modules
+.next
+.next-*
+.open-next
+.wrangler
+public/media
+specs
+.specify
+.claude
+playwright-report
+test-results
+package-lock.json
+next-env.d.ts
+AGENTS.md
+.tmp
+.dev.vars
+README.md

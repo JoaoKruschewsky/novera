@@ -1,0 +1,105 @@
+/*
+ * Design tokens Novera — "papel sobre grafite" (specs/001-novera-site-mvp/design-system.md).
+ * ÚNICA fonte de cor do projeto: componentes usam só os tokens SEMÂNTICOS abaixo.
+ * Todo par de cores novo MUST ter o contraste medido antes do uso (tests/unit/contraste.test.ts).
+ */
+
+@theme {
+  /* Reinicia a paleta padrão do Tailwind: só existem as cores Novera. */
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* ---------- Primitivos: paleta aprovada (Constitution II) ---------- */
+  --color-graphite: #252b32;
+  --color-slate: #343d47;
+  --color-sage: #596b69;
+  --color-champagne: #b49a70;
+  --color-sand: #d8d0c3;
+  --color-offwhite: #f2f0ea;
+
+  /* Derivados permitidos (design-system §2.1) */
+  --color-graphite-deep: color-mix(in srgb, var(--color-graphite) 85%, black);
+  --color-champagne-strong: color-mix(in srgb, var(--color-champagne) 88%, var(--color-offwhite));
+  --color-line: color-mix(in srgb, var(--color-offwhite) 12%, var(--color-graphite));
+  --color-line-paper: color-mix(in srgb, var(--color-graphite) 18%, var(--color-sand));
+  --color-field-border: color-mix(in srgb, var(--color-sand) 70%, var(--color-graphite));
+
+  /* ---------- Semânticos (design-system §3) ---------- */
+  --color-surface-base: var(--color-graphite);
+  --color-surface-raised: var(--color-slate);
+  --color-surface-paper: var(--color-sand);
+  --color-surface-paper-bright: var(--color-offwhite);
+  --color-surface-footer: var(--color-graphite-deep);
+
+  --color-text-primary: var(--color-offwhite);
+  --color-text-secondary: var(--color-sand);
+  --color-text-on-paper: var(--color-graphite);
+  --color-text-on-paper-muted: var(--color-sage);
+  --color-text-accent: var(--color-champagne);
+
+  --color-border-subtle: var(--color-line);
+  --color-border-paper: var(--color-line-paper);
+  --color-border-field: var(--color-field-border);
+
+  --color-accent: var(--color-champagne);
+  --color-accent-hover: var(--color-champagne-strong);
+  --color-on-accent: var(--color-graphite);
+
+  --color-focus-ring: var(--color-champagne);
+  --color-focus-ring-paper: var(--color-graphite);
+
+  /* Erro: a paleta não tem vermelho. O erro é sempre texto + ícone CircleAlert + borda;
+     a cor (champagne-strong sobre graphite) é só um reforço, nunca o único sinal. */
+  --color-state-error: var(--color-champagne-strong);
+  --color-state-success: var(--color-offwhite);
+
+  /* ---------- Tipografia (design-system §2.3) ---------- */
+  --font-display: var(--font-newsreader), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-hanken), "Segoe UI", system-ui, sans-serif;
+
+  --text-display: clamp(2.5rem, 1.857rem + 3.214vw, 4.75rem);
+  --text-display--line-height: 1.05;
+  --text-h1: clamp(2.125rem, 1.732rem + 1.964vw, 3.5rem);
+  --text-h1--line-height: 1.1;
+  --text-h2: clamp(1.75rem, 1.536rem + 1.071vw, 2.5rem);
+  --text-h2--line-height: 1.15;
+  --text-h3: clamp(1.3125rem, 1.223rem + 0.446vw, 1.625rem);
+  --text-h3--line-height: 1.25;
+  --text-lead: clamp(1.125rem, 1.071rem + 0.268vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+  --text-body: clamp(1rem, 0.982rem + 0.089vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-small: clamp(0.875rem, 0.857rem + 0.089vw, 0.9375rem);
+  --text-small--line-height: 1.5;
+  --text-eyebrow: clamp(0.75rem, 0.732rem + 0.089vw, 0.8125rem);
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.12em;
+
+  /* ---------- Larguras (design-system §2.4) ---------- */
+  --container-content: 1200px;
+  --container-prose: 68ch;
+  --container-wide: 1360px;
+
+  /* ---------- Raio e sombra (design-system §2.5) ---------- */
+  --radius-*: initial;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-full: 9999px;
+  --shadow-*: initial;
+  --shadow-paper:
+    0 1px 2px color-mix(in srgb, black 18%, transparent),
+    0 12px 32px -16px color-mix(in srgb, black 35%, transparent);
+
+  /* ---------- Movimento (design-system §2.6) ---------- */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --ease-novera: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+  }
+}

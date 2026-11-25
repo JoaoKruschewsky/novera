@@ -1,0 +1,50 @@
+name: deploy
+
+# Publica na Cloudflare Workers SOMENTE a partir da main, depois do workflow "ci" verde.
+# Segredos do Worker (SMTP_* ou RESEND_API_KEY, Turnstile, FORM_SIGNING_SECRET, NOVERA_INBOX_EMAIL, MAIL_FROM)
+# ficam só no painel da Cloudflare ou via `wrangler secret put`, nunca no repositório.
+# Variáveis públicas de build (NEXT_PUBLIC_*) e NOVERA_PUBLICACAO_OFICIAL ficam em
+# Settings → Secrets and variables → Actions → Variables.
+
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-producao
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    runs-on: ubuntu-latest
+    environment: producao
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Build e deploy (OpenNext + wrangler)
+        run: npm run deploy:cf
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NEXT_PUBLIC_SITE_URL: ${{ vars.NEXT_PUBLIC_SITE_URL }}
+          NEXT_PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.NEXT_PUBLIC_TURNSTILE_SITE_KEY }}
+          NEXT_PUBLIC_SALES_OVERRIDE: ${{ vars.NEXT_PUBLIC_SALES_OVERRIDE }}
+          # "true" ativa a guarda: o build falha se houver pendências de publicação.
+          NOVERA_PUBLICACAO_OFICIAL: ${{ vars.NOVERA_PUBLICACAO_OFICIAL }}
+          # "smtp" (qualquer provedor) por padrão; defina a variável MAIL_TRANSPORT=resend para trocar.
+          MAIL_TRANSPORT: ${{ vars.MAIL_TRANSPORT || 'smtp' }}
+          # Os segredos do Worker não existem neste ambiente: a guarda confere só as variáveis
+          # de build. Confira os segredos com `npx wrangler secret list` (checklist de publicação).
+          NOVERA_GUARDA_SOMENTE_BUILD: "true"

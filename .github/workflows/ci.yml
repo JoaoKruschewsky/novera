@@ -1,0 +1,107 @@
+name: ci
+
+on:
+  push:
+    branches: [main, "feature/**", "fix/**", "chore/**"]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+# Sem segredos de produção: transporte de e-mail falso e chaves de teste do Turnstile.
+env:
+  NEXT_TELEMETRY_DISABLED: "1"
+  MAIL_TRANSPORT: fake
+  NEXT_PUBLIC_SITE_URL: http://localhost:3100
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: 1x00000000000000000000AA
+  TURNSTILE_SECRET_KEY: 1x0000000000000000000000000000000AA
+  FORM_SIGNING_SECRET: segredo-de-teste-ci-com-mais-de-32-caracteres
+
+jobs:
+  qualidade:
+    name: qualidade
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run format:check
+
+  unitarios:
+    name: unitarios
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+
+  seguranca:
+    name: seguranca
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm audit --omit=dev --audit-level=high
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-next
+          path: .next/
+          retention-days: 3
+          include-hidden-files: true
+
+  e2e:
+    name: e2e
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npm run e2e:matrix
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: capturas
+          path: test-results/capturas/
+          retention-days: 14
+          if-no-files-found: ignore
