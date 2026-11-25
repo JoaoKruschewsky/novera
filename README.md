@@ -129,15 +129,23 @@ publicada).
 ## 7. Git, CI e deploy
 
 - Branches: `main` (protegida), `feature/…`, `fix/…`, `chore/…`. Conventional Commits.
-- **CI** (`.github/workflows/ci.yml`): typecheck, lint, formatação, unitários, `npm audit`,
-  build e e2e, em todo push nas branches de trabalho e em PRs para a `main`.
-- **PR automático** (`auto-pr.yml`): ao publicar uma branch `feature/`, `fix/` ou `chore/`, um PR
-  para a `main` é aberto se ainda não existir. O merge é sempre manual, com os checks verdes.
-  Requer: Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests".
-- **Proteção da `main`** (ruleset): PR obrigatório; checks `qualidade`, `unitarios`, `seguranca`,
-  `build` e `e2e` obrigatórios; sem force push nem exclusão. Se o plano do GitHub não permitir
+- **Workflows** (`.github/workflows/`). Na aba Actions, o prefixo de cada execução diz o contexto:
+
+  | Prefixo | Arquivo | Quando roda | O que faz |
+  |---|---|---|---|
+  | **FEAT** | `feat.yml` | push em `feature/…`, `fix/…`, `chore/…` | verificações rápidas: typecheck, lint, formatação, unitários, `npm audit`, build (sem e2e) |
+  | **FEAT** | `auto-pr.yml` | push em `feature/…`, `fix/…`, `chore/…` | abre o PR para a `main` se ainda não existir e dispara o primeiro "PR → main" |
+  | **PR → main** | `pr-main.yml` | PR aberto para a `main` e cada novo push nele | bateria completa, com a matriz e2e: é o sinal verde para o merge |
+  | **MAIN** | `main.yml` | push na `main` (merge do PR) | bateria completa e, se passar, deploy em produção na Cloudflare |
+
+  Os quatro reaproveitam os mesmos jobs de `_verificacoes.yml` (que não roda sozinho); nos checks,
+  aparecem como `FEAT / build`, `PR → main / e2e`, `MAIN / qualidade` etc.
+- O PR automático requer: Settings → Actions → General → "Allow GitHub Actions to create and
+  approve pull requests". O merge é sempre manual, com o "PR → main" verde.
+- **Proteção da `main`** (ruleset, opcional): PR obrigatório; checks `PR → main / qualidade`,
+  `unitarios`, `seguranca`, `build` e `e2e` obrigatórios; sem force push nem exclusão. Se o plano do GitHub não permitir
   regras em repositório privado, vale como processo: **nunca** fazer push direto na `main`.
-- **Deploy** (`deploy.yml`): só na `main`, depois do CI verde. Requer os secrets
+- **Deploy** (job `MAIN / deploy produção`, em `main.yml`): só na `main`, depois das verificações verdes. Requer os secrets
   `CLOUDFLARE_API_TOKEN` (escopo mínimo: Workers Scripts:Edit) e `CLOUDFLARE_ACCOUNT_ID`, e as
   variables `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` e `NOVERA_PUBLICACAO_OFICIAL`.
 - **Plano B de hospedagem**: Netlify Free (ver research R-03), sem mudanças de código além da

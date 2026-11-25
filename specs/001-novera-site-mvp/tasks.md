@@ -591,3 +591,11 @@ ações do responsável).
   schema. O responsável aprovou as fotos em ambiente (mockups de tablet), o que flexibiliza a
   regra "sem moldura de dispositivo" da R-15; as telas mostram páginas do produto. Exceções de
   movimento registradas no design-system §2.6. Originais em `media-originais/` (fora do Git).
+- **Workflows separados por contexto** (pedido do responsável, 2026-11-24): `ci.yml` e
+  `deploy.yml` (T011, T133) foram substituídos por `feat.yml` (**FEAT**: push nas branches de
+  trabalho, verificações rápidas sem e2e), `pr-main.yml` (**PR → main**: bateria completa),
+  `main.yml` (**MAIN**: bateria completa + deploy) e o reutilizável `_verificacoes.yml`. O
+  `auto-pr.yml` passou a se chamar "FEAT · abrir PR" e dispara o `pr-main.yml` por
+  `workflow_dispatch` logo após abrir o PR (PR criado pelo `GITHUB_TOKEN` não dispara
+  `pull_request`). O deploy deixou de usar `workflow_run` e virou um job que depende das
+  verificações no mesmo workflow.

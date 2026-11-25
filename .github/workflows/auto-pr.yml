@@ -1,7 +1,8 @@
-name: auto-pr
+name: "FEAT · abrir PR para a main"
+run-name: "FEAT · abrir PR · ${{ github.ref_name }}"
 
 # Abre automaticamente um PR para a main ao publicar uma branch de trabalho.
-# Nunca faz merge: o merge é manual, depois dos checks do workflow "ci" verdes.
+# Nunca faz merge: o merge é manual, depois do "PR → main" verde.
 # Requer: Settings → Actions → General → "Allow GitHub Actions to create and approve pull requests".
 
 on:
@@ -11,9 +12,11 @@ on:
 permissions:
   contents: read
   pull-requests: write
+  actions: write
 
 jobs:
   abrir-pr:
+    name: FEAT / abrir PR
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,3 +32,6 @@ jobs:
           fi
           titulo=$(git log -1 --pretty=%s)
           gh pr create --base main --head "$BRANCH" --title "$titulo" --body-file .github/pull_request_template.md
+          # PR criado pelo GITHUB_TOKEN não dispara o evento pull_request: dispara o
+          # "PR → main" manualmente para a primeira verificação completa.
+          gh workflow run pr-main.yml --ref "$BRANCH"
