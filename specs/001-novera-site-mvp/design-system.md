@@ -113,6 +113,12 @@ Texto corrido nunca em serifa abaixo de 18 px.
   demonstração.
 - `@media (prefers-reduced-motion: reduce)`: as durações vão para 0 ms; nenhuma informação
   depende de movimento (FR-041).
+- **Exceções aprovadas pelo responsável (2026-11-24)**, só na demonstração:
+  - vídeo de apresentação que toca **sem som** e em loop enquanto está visível na tela, com
+    controles nativos; com movimento reduzido, não inicia sozinho;
+  - faixa de fotos em movimento contínuo e lento (marquee, 60 s por volta), com botão
+    "Pausar fotos", pausa com ponteiro ou foco, bordas esmaecidas; com movimento reduzido, fica
+    parada e vira rolagem horizontal comum (WCAG 2.2.2).
 
 ## 3. Tokens semânticos
 
@@ -165,9 +171,10 @@ nota, seta de avanço). Nenhuma seção com ícone decorativo em série.
 - **Benefícios**: lista editorial numerada em duas colunas, com fios entre os itens; sem cards.
 - **Como funciona**: quatro passos em linha do tempo horizontal no desktop e vertical no
   mobile, conectados pelo fio champagne.
-- **Demonstração**: faixa de papel; uma página principal grande, uma tira de miniaturas
-  rotuladas por seção e uma legenda do que cada imagem mostra (navegação, diário, semanal,
-  calendário, metas, finanças, anotações, espaço de escrita).
+- **Demonstração**: faixa de papel; o vídeo de apresentação em destaque (com legenda e
+  descrição textual expansível), a faixa de fotos do planner em uso (marquee, ver §2.6) e o bloco
+  "Experimente antes de comprar" com o download da prévia gratuita em PDF. Na página do produto,
+  sem o vídeo (já está na home) e com o texto curto da prévia.
 - **Avaliações** (só com dados): citações em tipografia editorial e cabeçalho com média e
   contagem reais; sem carrossel automático.
 - **Compra**: bloco único e calmo, com o CTA e a nota "Pagamento processado por <plataforma>".

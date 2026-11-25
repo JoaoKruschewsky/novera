@@ -114,7 +114,7 @@ export default function PlannerPage() {
               Exemplos visuais
             </h2>
             <div className="mt-8">
-              <DemoGallery materials={demo} />
+              <DemoGallery materials={demo} freeSample={product.freeSample} showVideo={false} />
             </div>
           </Container>
         </PaperBand>

@@ -31,7 +31,7 @@ export default function HomePage() {
     <>
       <HeroSection brandName={site.brandName} hero={home.hero} featured={featured} />
       <ProductIntroSection product={product} number="01" />
-      <DemoSection materials={demo} number="02" />
+      <DemoSection materials={demo} freeSample={product.freeSample} number="02" />
       <BenefitsSection benefits={home.benefits} number="03" />
       <HowItWorksSection steps={home.howItWorks} number="04" />
       <ReviewsSection reviews={reviews} number="05" />

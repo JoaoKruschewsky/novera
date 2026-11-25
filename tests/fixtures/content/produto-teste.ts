@@ -36,6 +36,7 @@ export const produtoTeste: Product = {
   limitations: [{ text: "Limitação fictícia de teste.", status: "pendente" }],
   sales: { state: "vendas-nao-abertas", platform: null, checkoutUrl: null, price: null },
   demo: [],
+  freeSample: null,
   compatibility: [
     {
       app: "Aplicativo fictício",

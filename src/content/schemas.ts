@@ -133,6 +133,14 @@ export const demoMaterialSchema = z
     }
   });
 
+/** Prévia gratuita do produto: amostra real em PDF para baixar antes de comprar. */
+export const freeSampleSchema = z.object({
+  src: z.string().startsWith("/media/").endsWith(".pdf"),
+  pages: z.number().int().positive(),
+  sizeKb: z.number().int().positive(),
+  status: contentStatusSchema,
+});
+
 export const compatibilityRecordSchema = z.object({
   app: z.string().min(1),
   platform: z.string().min(1),
@@ -156,6 +164,7 @@ export const productSchema = z.object({
   limitations: z.array(copySchema),
   sales: salesConfigSchema,
   demo: z.array(demoMaterialSchema),
+  freeSample: freeSampleSchema.nullable(),
   compatibility: z.array(compatibilityRecordSchema),
   generalRequirements: copySchema,
   seo: z.object({ title: z.string().min(1), description: z.string().min(1).max(160) }),

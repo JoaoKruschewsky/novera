@@ -12,6 +12,12 @@ async function rastrear(page: Page): Promise<string[]> {
     const rota = fila.shift() as string;
     if (visitadas.has(rota)) continue;
     visitadas.add(rota);
+    // Arquivos (PDF, vídeo, imagem): só confere que existem; não são páginas para rastrear.
+    if (/\.[a-z0-9]+$/i.test(rota)) {
+      const arquivo = await page.request.get(rota);
+      if (arquivo.status() !== 200) problemas.push(`${rota} → ${arquivo.status()}`);
+      continue;
+    }
     const res = await page.goto(rota);
     if (res?.status() !== 200) problemas.push(`${rota} → ${res?.status()}`);
     const hrefs = await page

@@ -107,3 +107,38 @@ dialog.sheet-content[open]::backdrop {
 html:has(dialog.sheet-content[open]) {
   overflow: hidden;
 }
+
+/* Faixa de fotos da demonstração (marquee). Exceção registrada no design-system §2.6:
+   movimento contínuo e lento, com pausa (botão, ponteiro e foco) e parado com movimento reduzido. */
+@keyframes marquee-passar {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+}
+.marquee-trilha {
+  animation: marquee-passar 60s linear infinite;
+}
+.marquee:hover .marquee-trilha,
+.marquee:focus-within .marquee-trilha,
+.marquee[data-pausado] .marquee-trilha {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+  }
+  .marquee-trilha {
+    animation: none;
+  }
+  .marquee-trilha li {
+    scroll-snap-align: start;
+  }
+  .marquee-copia,
+  .marquee-controle {
+    display: none;
+  }
+}

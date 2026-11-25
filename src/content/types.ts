@@ -10,6 +10,7 @@ import type {
   contentStatusSchema,
   copySchema,
   demoMaterialSchema,
+  freeSampleSchema,
   faqItemSchema,
   featureSchema,
   homeContentSchema,
@@ -31,6 +32,7 @@ export type Copy = z.infer<typeof copySchema>;
 export type Feature = z.infer<typeof featureSchema>;
 export type SalesConfig = z.infer<typeof salesConfigSchema>;
 export type DemoMaterial = z.infer<typeof demoMaterialSchema>;
+export type FreeSample = z.infer<typeof freeSampleSchema>;
 export type CompatibilityRecord = z.infer<typeof compatibilityRecordSchema>;
 export type Product = z.infer<typeof productSchema>;
 export type FaqItem = z.infer<typeof faqItemSchema>;

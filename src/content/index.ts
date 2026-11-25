@@ -64,9 +64,12 @@ function load(): SiteContent {
       .join("\n");
     throw new Error(`Conteúdo inválido em src/content/:\n${detalhes}`);
   }
-  assertDemoFilesExist(parsed.data.product.demo, (p) =>
-    existsSync(path.join(process.cwd(), "public", p)),
-  );
+  const existe = (p: string) => existsSync(path.join(process.cwd(), "public", p));
+  assertDemoFilesExist(parsed.data.product.demo, existe);
+  const amostra = parsed.data.product.freeSample;
+  if (amostra?.status === "aprovado" && !existe(amostra.src)) {
+    throw new Error(`Prévia gratuita aprovada sem arquivo em public/: ${amostra.src}`);
+  }
   return parsed.data;
 }
 

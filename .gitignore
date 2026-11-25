@@ -47,6 +47,9 @@ next-env.d.ts
 /.wrangler/
 .dev.vars
 
+# originais pesados das mídias (as versões otimizadas ficam em public/media/)
+/media-originais/
+
 # testes e temporários
 /.tmp/
 /playwright-report/

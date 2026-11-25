@@ -8,7 +8,7 @@ function srcSet(src: string, formato: "avif" | "webp"): string {
 
 /**
  * Imagem REAL do produto (research R-15): <picture> com AVIF/WebP pré-gerados, largura e altura
- * explícitas (evita CLS), alt obrigatório e legenda. Sem moldura de dispositivo falsa.
+ * explícitas (evita CLS), alt obrigatório e legenda.
  */
 export function ProductFigure({
   material,

@@ -1,6 +1,6 @@
 import type { Feature, Product } from "../../types";
 import { compatibility, generalRequirements } from "./compatibilidade";
-import { demo } from "./demonstracao";
+import { demo, freeSample } from "./demonstracao";
 
 /**
  * Novera Planner Digital 2027 (data-model.md §1.2).
@@ -105,6 +105,7 @@ export const product: Product = {
     price: null, // P-03: exibido só com status aprovado
   },
   demo,
+  freeSample,
   compatibility,
   generalRequirements,
   seo: {
