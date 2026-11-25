@@ -1,18 +1,17 @@
 name: "PR → main · verificação completa"
-run-name: "${{ github.event_name == 'pull_request' && format('PR #{0} → main · {1}', github.event.pull_request.number, github.head_ref) || format('PR → main · {0} (disparado pelo auto-PR)', github.ref_name) }}"
+run-name: "PR #${{ github.event.pull_request.number }} → main · ${{ github.head_ref }}"
 
 # Roda em todo pull request para a main (ao abrir e a cada novo push na branch do PR).
-# Bateria completa, com a matriz e2e. É o sinal verde para fazer o merge.
-# `workflow_dispatch`: usado pelo auto-PR, porque um PR aberto pelo GITHUB_TOKEN não dispara
-# o evento pull_request (limitação do GitHub).
+# Bateria completa, com a matriz e2e. É o sinal verde para o merge.
+# PR aberto pelo auto-PR (robô): a primeira execução fica aguardando aprovação no PR
+# ("Approve and run"); os pushes seguintes da pessoa rodam sozinhos.
 
 on:
   pull_request:
     branches: [main]
-  workflow_dispatch:
 
 concurrency:
-  group: pr-main-${{ github.event.pull_request.number || github.ref }}
+  group: pr-main-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 permissions:

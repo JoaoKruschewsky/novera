@@ -594,8 +594,5 @@ ações do responsável).
 - **Workflows separados por contexto** (pedido do responsável, 2026-11-24): `ci.yml` e
   `deploy.yml` (T011, T133) foram substituídos por `feat.yml` (**FEAT**: push nas branches de
   trabalho, verificações rápidas sem e2e), `pr-main.yml` (**PR → main**: bateria completa),
-  `main.yml` (**MAIN**: bateria completa + deploy) e o reutilizável `_verificacoes.yml`. O
-  `auto-pr.yml` passou a se chamar "FEAT · abrir PR" e dispara o `pr-main.yml` por
-  `workflow_dispatch` logo após abrir o PR (PR criado pelo `GITHUB_TOKEN` não dispara
-  `pull_request`). O deploy deixou de usar `workflow_run` e virou um job que depende das
+  `main.yml` (**MAIN**: bateria completa + deploy) e o reutilizável `_verificacoes.yml`. O `auto-pr.yml` passou a se chamar "FEAT · abrir PR". No PR aberto pelo robô, a primeira execução do "PR → main" fica aguardando aprovação ("Approve and run"); o disparo por `workflow_dispatch` foi descartado porque exige o workflow já existente na `main`. O deploy deixou de usar `workflow_run` e virou um job que depende das
   verificações no mesmo workflow.

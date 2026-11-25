@@ -1,5 +1,5 @@
 name: "FEAT · verificações rápidas"
-run-name: "FEAT · ${{ github.ref_name }} · ${{ github.event.head_commit.message }}"
+run-name: "FEAT · ${{ github.ref_name }}"
 
 # Roda a cada push nas branches de trabalho (feature/, fix/, chore/).
 # Verificações rápidas (typecheck, lint, formatação, unitários, audit, build), sem e2e:

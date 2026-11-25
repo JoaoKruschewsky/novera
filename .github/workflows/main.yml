@@ -1,5 +1,5 @@
 name: "MAIN · verificação + deploy em produção"
-run-name: "MAIN · produção · ${{ github.event.head_commit.message }}"
+run-name: "MAIN · produção · ${{ github.ref_name }}"
 
 # Roda a cada push na main (normalmente o merge de um PR).
 # 1) bateria completa de verificações; 2) se tudo passar, publica na Cloudflare Workers.
@@ -31,7 +31,7 @@ jobs:
       group: deploy-producao
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 24

@@ -12,14 +12,13 @@ on:
 permissions:
   contents: read
   pull-requests: write
-  actions: write
 
 jobs:
   abrir-pr:
     name: FEAT / abrir PR
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Abrir PR para a main se ainda não existir
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,6 +31,5 @@ jobs:
           fi
           titulo=$(git log -1 --pretty=%s)
           gh pr create --base main --head "$BRANCH" --title "$titulo" --body-file .github/pull_request_template.md
-          # PR criado pelo GITHUB_TOKEN não dispara o evento pull_request: dispara o
-          # "PR → main" manualmente para a primeira verificação completa.
-          gh workflow run pr-main.yml --ref "$BRANCH"
+          # A primeira execução do "PR → main" em um PR aberto pelo robô fica aguardando
+          # aprovação (botão "Approve and run" no PR). Os pushes seguintes rodam sozinhos.
