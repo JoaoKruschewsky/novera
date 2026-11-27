@@ -114,8 +114,11 @@ specs/001-novera-site-mvp/
 ```text
 .github/
 ├── workflows/
-│   ├── ci.yml                  # PR e main: typecheck, lint, format, unit, build, e2e (+ capturas)
-│   └── deploy.yml              # main: build OpenNext + deploy Cloudflare (após CI verde)
+│   ├── _verificacoes.yml       # reutilizável: qualidade, unitários, audit, build, e2e (+ capturas)
+│   ├── feat.yml                # FEAT: push nas branches de trabalho, verificações rápidas (sem e2e)
+│   ├── auto-pr.yml             # FEAT: abre o PR para a main
+│   ├── pr-main.yml             # PR → main: bateria completa, com e2e
+│   └── main.yml                # MAIN: bateria completa + deploy Cloudflare
 └── pull_request_template.md    # checklist Constitution VIII + revisão visual
 
 public/
@@ -303,10 +306,10 @@ Detalhes em [research.md R-14](./research.md).
 3. **Proteção da `main`** (ruleset): PR obrigatório, checks `ci` obrigatórios, sem force push
    nem exclusão. Se o plano do GitHub não permitir em repositório privado, vale o processo
    documentado no README.
-4. **CI** (`ci.yml`): `npm ci` → `typecheck` → `lint` → `format:check` → `test` → `build` →
+4. **CI** (`_verificacoes.yml`, chamado por `feat.yml` sem e2e, `pr-main.yml` e `main.yml`): `npm ci` → `typecheck` → `lint` → `format:check` → `test` → `build` →
    `e2e` (Chromium + WebKit mobile) → artefato com as capturas das 6 larguras e o relatório
    Playwright.
-5. **Deploy** (`deploy.yml`): só na `main`, depois do CI verde; prévias de PR opcionais via
+5. **Deploy** (job de `main.yml`): só na `main`, depois das verificações verdes; prévias de PR opcionais via
    `wrangler versions upload` (sem custo), se o limite permitir.
 6. O template de PR traz o checklist da Constitution VIII e da revisão visual.
 

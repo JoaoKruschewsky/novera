@@ -1,0 +1,24 @@
+name: "FEAT · verificações rápidas"
+run-name: "FEAT · ${{ github.ref_name }}"
+
+# Roda a cada push nas branches de trabalho (feature/, fix/, chore/).
+# Verificações rápidas (typecheck, lint, formatação, unitários, audit, build), sem e2e:
+# a bateria completa roda no workflow "PR → main".
+
+on:
+  push:
+    branches: ["feature/**", "fix/**", "chore/**"]
+
+concurrency:
+  group: feat-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verificacoes:
+    name: FEAT
+    uses: ./.github/workflows/_verificacoes.yml
+    with:
+      e2e: false

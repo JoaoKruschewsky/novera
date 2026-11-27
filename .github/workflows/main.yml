@@ -1,33 +1,37 @@
-name: deploy
+name: "MAIN · verificação + deploy em produção"
+run-name: "MAIN · produção · ${{ github.ref_name }}"
 
-# Publica na Cloudflare Workers SOMENTE a partir da main, depois do workflow "ci" verde.
+# Roda a cada push na main (normalmente o merge de um PR).
+# 1) bateria completa de verificações; 2) se tudo passar, publica na Cloudflare Workers.
 # Segredos do Worker (SMTP_* ou RESEND_API_KEY, Turnstile, FORM_SIGNING_SECRET, NOVERA_INBOX_EMAIL, MAIL_FROM)
 # ficam só no painel da Cloudflare ou via `wrangler secret put`, nunca no repositório.
 # Variáveis públicas de build (NEXT_PUBLIC_*) e NOVERA_PUBLICACAO_OFICIAL ficam em
 # Settings → Secrets and variables → Actions → Variables.
 
 on:
-  workflow_run:
-    workflows: [ci]
-    types: [completed]
+  push:
     branches: [main]
 
 permissions:
   contents: read
 
-concurrency:
-  group: deploy-producao
-  cancel-in-progress: false
-
 jobs:
+  verificacoes:
+    name: MAIN
+    uses: ./.github/workflows/_verificacoes.yml
+    with:
+      e2e: true
+
   deploy:
-    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push'
+    name: MAIN / deploy produção
+    needs: verificacoes
     runs-on: ubuntu-latest
     environment: producao
+    concurrency:
+      group: deploy-producao
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+      - uses: actions/checkout@v5
       - uses: actions/setup-node@v4
         with:
           node-version: 24
