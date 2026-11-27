@@ -87,6 +87,6 @@ export const demo: DemoMaterial[] = [
 export const freeSample: FreeSample = {
   src: "/media/planner-2027/novera-planner-2027-previa.pdf",
   pages: 5,
-  sizeKb: 99,
+  sizeKb: 100,
   status: "aprovado",
 };

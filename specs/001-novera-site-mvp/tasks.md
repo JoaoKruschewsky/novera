@@ -587,7 +587,7 @@ ações do responsável).
 - **Demonstração com materiais reais** (2026-11-24, materiais fornecidos pelo responsável):
   vídeo de apresentação (25 s, recomprimido de 5,9 MB para 1,7 MB, capa tirada do próprio vídeo),
   5 fotos do planner em tablet (AVIF/WebP 640/1080/1600) numa faixa em movimento (marquee) e a
-  prévia gratuita em PDF (5 páginas, 99 KB) para download. Novo campo `product.freeSample` no
+  prévia gratuita em PDF (5 páginas, 100 KB; atualizada para a v3, com o texto da capa corrigido, em 2026-11-27) para download. Novo campo `product.freeSample` no
   schema. O responsável aprovou as fotos em ambiente (mockups de tablet), o que flexibiliza a
   regra "sem moldura de dispositivo" da R-15; as telas mostram páginas do produto. Exceções de
   movimento registradas no design-system §2.6. Originais em `media-originais/` (fora do Git).
